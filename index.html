@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="App">
+<head>
+    <title>SaharaSalt</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    <script src="https://npmcdn.com/parse@1.9.2/dist/parse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/g/angularjs@1.6.0(angular.min.js+angular-route.min.js+angular-sanitize.min.js)"></script>
+    <script type="text/javascript"
+            src="http://maps.google.com/maps/api/js?key=AIzaSyAxlzXskkl3KKdjZUuFrV-j8oFjWOjtTIQ&libraries=drawing,places"></script>
+    <script src="main.js" type="application/javascript"></script>
+    <style>
+        #divLoading.show {
+            display: block;
+            position: fixed;
+            z-index: 9999;
+            opacity: 0.9;
+            background: #ffffff url(data:image/gif;base64,R0lGODlhLQAtAPMPANTU1O3t7fJoRfv7++9OJdvb2+Lf3/SBZPixn/7v6/m+r/b29ubm5u0wAM3Nzf///yH/C05FVFNDQVBFMi4wAwEAAAAh+QQFCgAPACwAAAAALQAtAAAE//DJSesIBjg3WxMHklRkaUpBsa2c5L0fcs5VoLFrB7+ETJsDFY6l270Eox8lMBwWjS+fktnEPaEehVJiqBJd2NdhOul6ARNCuDFGnZiG8tAQGFQSioOx/egGSgsrcVwrDHYzCXoefGYOCyRCG4N9AI9bBgSMLAU1c1s0jSt/Ezc4k58VoStoKFWsqBWlOKOROJawFIFNnANVDLglDFUXw8AkvU0YTafGcnOyos0kVDjQK4fSE8heLK/ZpE3f4uPk5RVN3uLWXuXb1cnk1N2qkuT0DnTF3+4sdb7iwprYqcUCmzF+Kzg9kNct2zoHox6sY4brnjeG+MTRiyih1qQMBltpDADwcRMJXRkJbTAkMmDKPituLXmpiiTHCcpMybm5xJkrcF4m8Sxxz4oEbvW2YAx3FCnET0uNPnA6dMYCglK5FZCJykaVCa6qdsUKFkcBscAuZNhQ1mbIGREAACH5BAUKAA8ALBgAAAAVABUAAARg0Lliwng46y37DFuIeR4AihlJFheqqmf4wuLsGShgOzimhIOAQdV7HBoI1IDRKR4bjQTqsQA4oVDBdPPEIreYrpcAfhC83t/WgMZqwWLvotyGJuH1Q1lRf28TdQ1lZnURACH5BAUKAA8ALCIABwALAB8AAARe8EkZppXG1fuyc8PlfYU1fhqGroAErGu1wGj5MPQXPnna5QZKzjboTV40jnLJ5BAa0GhDkpBKJQorVCA5aBuHR/WLeHi/Cca3wX1+FeYvYXKWlulS7qWeUHrvSnAWEQAh+QQFCgAPACwYABgAFQAVAAAEZ/DJSSdwOLvK39BaVwUgVoiUUToGKn1r4D7M6gzuYp/uFc+qEmAmCWpkHQPhMDE6eJXEoUFlFjO4SUIxpXqtDxVSQvCav5Ox5MxugCtttqITNyNE9YYggYoT7i5sAnNEVAIHCHxEEhEAIfkEBQoADwAsBwAiAB8ACwAABFrwSXmImTjPBa6mTXh82cA4qJcdYdscSlIGBmo7KujuxATcQNyEtStOgsGLosg8IoGBB4K5cz5RUUlCQA1ZkYWBBkGgfm+ALEnBrUqCBTVpkkAc2s6CISD+RAAAIfkEBQoADwAsAAAYABUAFQAABF+wydnIuzhjSpP+j8BJCqgdY3OYGZI2Hvsk7yqHr3Err3UTKZvMxRHeRBOhAbBg0SRKh5TBckWlWENg8CldDNgwFmACi8+gwHltUq/DrEHhLb0FAO/bJWCG6y8DfHMOEQAh+QQFCgAPACwAAAcACwAfAAAEYPBJqaaVqJ0rU/vbJXyglZGlRKDkprAk8YxwY3j1dsLSkUs0VuVRayQkNRlnyWxeHNCoAzCRSgeSghUakBi2DoMkAHZgB2VGtrx4kMHUBwAsdm/r6yhegobuJ2R/Fl0WEQAh+QQFCgAPACwAAAAAFQAVAAAEYvDJSWtCR7RWu1TaJnoUQogoRyZhOnqI63qKPHuHjVbBlOsESsBh8LkOigRl4GgWJb/GgVRoOn2EZ2dovZIogK5VS+KKHYCvpHp2LNTMNkP9MIvpD0ObTG336G0OA3htaXgRADs=) no-repeat center;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            top: 0;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        #map_canvas {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
+
+        .delete-menu {
+            position: absolute;
+            background: white;
+            padding: 3px;
+            color: #666;
+            font-weight: bold;
+            border: 1px solid #999;
+            font-family: sans-serif;
+            font-size: 12px;
+            box-shadow: 1px 3px 3px rgba(0, 0, 0, .3);
+            margin-top: -10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .delete-menu:hover {
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+<div id="divLoading" class="show"></div>
+<main>
+    <center>
+        <div ng-view></div>
+    </center>
+</main>
+</body>
+</html>
