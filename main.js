@@ -15,6 +15,7 @@ app.config(function ($routeProvider) {
 app.run(function ($rootScope) {
     $rootScope.user = Parse.User.current();
     $rootScope.logout = function () {
+        showSpinner();
         Parse.User.logOut().then(function () {
             location.reload();
         });
@@ -147,6 +148,16 @@ function initMap() {
 
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('search-bar'));
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('side-widget'));
+    map.data.setControls(['LineString', 'Polygon', 'Point']);
+    map.data.setStyle({
+        editable: true,
+        draggable: true
+    });
+    bindDataLayerListeners(map.data);
+
+    //load saved data
+    loadPolygons(map);
+
 }
 app.controller('indexCtrl', function ($scope, $rootScope) {
     initIndex();
@@ -450,13 +461,13 @@ function initDrawingManager() {
 
 function addRuler() {
 
-    ruler1 = new google.maps.Marker({
+    var ruler1 = new google.maps.Marker({
         position: map.getCenter(),
         map: map,
         draggable: true
     });
 
-    ruler2 = new google.maps.Marker({
+    var ruler2 = new google.maps.Marker({
         position: map.getCenter(),
         map: map,
         draggable: true
@@ -467,7 +478,7 @@ function addRuler() {
     ruler1label.bindTo('position', ruler1, 'position');
     ruler2label.bindTo('position', ruler2, 'position');
 
-    rulerpoly = new google.maps.Polyline({
+   var rulerpoly = new google.maps.Polyline({
         path: [ruler1.position, ruler2.position],
         strokeColor: "#FFFF00",
         strokeOpacity: .7,
@@ -587,3 +598,26 @@ Label.prototype.draw = function () {
 
     this.span_.innerHTML = this.get('text').toString();
 };
+
+function bindDataLayerListeners(dataLayer) {
+    dataLayer.addListener('addfeature', savePolygon);
+    dataLayer.addListener('removefeature', savePolygon);
+    dataLayer.addListener('setgeometry', savePolygon);
+}
+
+function loadPolygons(map) {
+    var data = JSON.parse(localStorage.getItem('geoData'));
+
+    map.data.forEach(function (f) {
+        map.data.remove(f);
+    });
+    map.data.addGeoJson(data)
+}
+
+
+
+function savePolygon() {
+    map.data.toGeoJson(function (json) {
+        localStorage.setItem('geoData', JSON.stringify(json));
+    });
+}
